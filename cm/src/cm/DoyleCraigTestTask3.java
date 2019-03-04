@@ -760,4 +760,38 @@ public class DoyleCraigTestTask3 {
         assertEquals(total.calculate(new Period(13,16)),new BigDecimal("5.00"));
 
     }
+
+    @Test
+    public void testCase40(){
+        // test calculate rate Staff max payable €16 per day (amount over 16)
+
+        BigDecimal normalRate = new BigDecimal(8);
+        BigDecimal reducedRate = new BigDecimal(4);
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+
+        normalPeriods.add(new Period(9,15));
+        reducedPeriods.add(new Period(15,22));
+
+        Rate total = new Rate(CarParkKind.STAFF, normalRate, reducedRate, reducedPeriods, normalPeriods);
+        assertEquals(total.calculate(new Period(13,16)),new BigDecimal("16.00"));
+
+    }
+
+    @Test
+    public void testCase41(){
+        // test calculate rate Staff max payable €16 per day (amount under 16)
+
+        BigDecimal normalRate = new BigDecimal(2);
+        BigDecimal reducedRate = new BigDecimal(1);
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+
+        normalPeriods.add(new Period(9,15));
+        reducedPeriods.add(new Period(15,22));
+
+        Rate total = new Rate(CarParkKind.STUDENT, normalRate, reducedRate, reducedPeriods, normalPeriods);
+        assertEquals(total.calculate(new Period(13,16)),new BigDecimal("5.00"));
+
+    }
 }
