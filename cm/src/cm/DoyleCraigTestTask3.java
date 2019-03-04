@@ -692,4 +692,72 @@ public class DoyleCraigTestTask3 {
         assertEquals(total.calculate(new Period(1,5)),new BigDecimal("3.00"));
 
     }
+
+    @Test
+    public void testCase36(){
+        // test calculate rate Student 25% reduction above 5.50
+        //(normalPeriod)
+        BigDecimal normalRate = new BigDecimal(2);
+        BigDecimal reducedRate = new BigDecimal(1);
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+
+        normalPeriods.add(new Period(8,15));
+        reducedPeriods.add(new Period(16,19));
+
+        Rate total = new Rate(CarParkKind.STUDENT, normalRate, reducedRate, reducedPeriods, normalPeriods);
+        assertEquals(total.calculate(new Period(8,13)),new BigDecimal("3.375"));
+
+    }
+
+    @Test
+    public void testCase37(){
+        // test calculate rate Student 25% reduction above 5.50
+        //(reducePeriod)
+        BigDecimal normalRate = new BigDecimal(3);
+        BigDecimal reducedRate = new BigDecimal(2);
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+
+        normalPeriods.add(new Period(8,15));
+        reducedPeriods.add(new Period(16,22));
+
+        Rate total = new Rate(CarParkKind.STUDENT, normalRate, reducedRate, reducedPeriods, normalPeriods);
+        assertEquals(total.calculate(new Period(16,21)),new BigDecimal("3.375"));
+
+    }
+
+    @Test
+    public void testCase38(){
+        // test calculate rate Student 25% reduction above 5.50
+        //(normalPeriod & reducePeriod)
+        BigDecimal normalRate = new BigDecimal(3);
+        BigDecimal reducedRate = new BigDecimal(2);
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+
+        normalPeriods.add(new Period(9,15));
+        reducedPeriods.add(new Period(15,22));
+
+        Rate total = new Rate(CarParkKind.STUDENT, normalRate, reducedRate, reducedPeriods, normalPeriods);
+        assertEquals(total.calculate(new Period(13,17)),new BigDecimal("3.375"));
+
+    }
+
+    @Test
+    public void testCase39(){
+        // test calculate rate Student 25% reduction not applied amount too low
+
+        BigDecimal normalRate = new BigDecimal(2);
+        BigDecimal reducedRate = new BigDecimal(1);
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+
+        normalPeriods.add(new Period(9,15));
+        reducedPeriods.add(new Period(15,22));
+
+        Rate total = new Rate(CarParkKind.STUDENT, normalRate, reducedRate, reducedPeriods, normalPeriods);
+        assertEquals(total.calculate(new Period(13,16)),new BigDecimal("5.00"));
+
+    }
 }
