@@ -3,6 +3,7 @@ package cm;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.math.RoundingMode;
 
 /**
  * Created by CM on 01/02/2018.
@@ -94,8 +95,52 @@ public class Rate {
     public BigDecimal calculate(Period periodStay) {
         int normalRateHours = periodStay.occurences(normal);
         int reducedRateHours = periodStay.occurences(reduced);
-        return (this.hourlyNormalRate.multiply(BigDecimal.valueOf(normalRateHours))).add(
-                this.hourlyReducedRate.multiply(BigDecimal.valueOf(reducedRateHours)));
+        BigDecimal total = (this.hourlyNormalRate.multiply(BigDecimal.valueOf(normalRateHours))).add(
+                this.hourlyReducedRate.multiply(BigDecimal.valueOf(reducedRateHours))).setScale(2,RoundingMode.HALF_UP);
+
+        if (kind != CarParkKind.VISITOR) {
+            if(kind == CarParkKind.MANAGEMENT)
+            {
+                if(total.compareTo(new BigDecimal("3.00")) < 0)
+                {
+                    total = new BigDecimal("3.00");
+                }
+            }
+            else if(kind == CarParkKind.STUDENT)
+            {
+                if(total.compareTo(new BigDecimal("5.50")) <=0)
+                {
+                    return total;
+                }
+                else{
+                    BigDecimal temp = total.subtract(new BigDecimal("5.50"));
+                    temp = temp.multiply(new BigDecimal("0.75")).setScale(2, RoundingMode.HALF_UP);
+                    total = temp.add(new BigDecimal("5.50"));
+                }
+            }
+            else if(kind == CarParkKind.STAFF)
+            {
+                if(total.compareTo(new BigDecimal("16.00")) > 0)
+                {
+                    total = new BigDecimal("16.00");
+                }
+            }
+        } else {
+            if(total.compareTo(new BigDecimal("8")) <= 0)
+            {
+                return (new BigDecimal("0.00"));
+            }
+            else
+            {
+                total = total.subtract(new BigDecimal("8"));
+                total = total.divide(new BigDecimal("2"), 2, BigDecimal.ROUND_HALF_UP);
+
+            }
+        }
+
+        return total;
+
+
     }
 
 }
