@@ -613,6 +613,83 @@ public class DoyleCraigTestTask3 {
         assertEquals(total.calculate(new Period(12,22)),new BigDecimal("6.00"));
 
     }
+    @Test
+    public void testCase31(){
+        // test calculate rate VISITOR: 50% discount after €8 on both rates together
+        BigDecimal normalRate = new BigDecimal(4);
+        BigDecimal reducedRate = new BigDecimal(2);
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
 
+        normalPeriods.add(new Period(10,14));
+        reducedPeriods.add(new Period(14,20));
 
+        Rate total = new Rate(CarParkKind.VISITOR, normalRate, reducedRate, reducedPeriods, normalPeriods);
+        assertEquals(total.calculate(new Period(12,18)),new BigDecimal("4.00"));
+
+    }
+
+    @Test
+    public void testCase32(){
+        // test calculate rate Management min €3 (normalPeriods)
+        BigDecimal normalRate = new BigDecimal(1);
+        BigDecimal reducedRate = new BigDecimal(0);
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+
+        normalPeriods.add(new Period(10,14));
+        reducedPeriods.add(new Period(14,20));
+
+        Rate total = new Rate(CarParkKind.MANAGEMENT, normalRate, reducedRate, reducedPeriods, normalPeriods);
+        assertEquals(total.calculate(new Period(10,12)),new BigDecimal("3.00"));
+
+    }
+
+    @Test
+    public void testCase33(){
+        // test calculate rate Management min €3 (reducedPeriods)
+        BigDecimal normalRate = new BigDecimal(2);
+        BigDecimal reducedRate = new BigDecimal(1);
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+
+        normalPeriods.add(new Period(10,14));
+        reducedPeriods.add(new Period(14,17));
+
+        Rate total = new Rate(CarParkKind.MANAGEMENT, normalRate, reducedRate, reducedPeriods, normalPeriods);
+        assertEquals(total.calculate(new Period(14,15)),new BigDecimal("3.00"));
+
+    }
+
+    @Test
+    public void testCase34(){
+        // test calculate rate Management min €3 (normalPeriods & reducePeriods)
+        BigDecimal normalRate = new BigDecimal(1);
+        BigDecimal reducedRate = new BigDecimal(1);
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+
+        normalPeriods.add(new Period(10,14));
+        reducedPeriods.add(new Period(14,18));
+
+        Rate total = new Rate(CarParkKind.MANAGEMENT, normalRate, reducedRate, reducedPeriods, normalPeriods);
+        assertEquals(total.calculate(new Period(13,15)),new BigDecimal("3.00"));
+
+    }
+
+    @Test
+    public void testCase35(){
+        // test calculate rate Management min €3 (free period)
+        BigDecimal normalRate = new BigDecimal(4);
+        BigDecimal reducedRate = new BigDecimal(3);
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+
+        normalPeriods.add(new Period(10,15));
+        reducedPeriods.add(new Period(16,18));
+
+        Rate total = new Rate(CarParkKind.MANAGEMENT, normalRate, reducedRate, reducedPeriods, normalPeriods);
+        assertEquals(total.calculate(new Period(1,5)),new BigDecimal("3.00"));
+
+    }
 }
